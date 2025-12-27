@@ -106,7 +106,7 @@ const App: React.FC = () => {
 
         let newHealth = Math.max(0, Math.min(100, g.health + healthChange));
         let newSanity = Math.max(0, Math.min(100, g.sanity + sanityChange));
-        let newStatus = g.status;
+        let newStatus: GuestStatus = g.status;
 
         // Death/Missing Check
         if (newHealth <= 0) newStatus = 'DEAD';
@@ -121,17 +121,6 @@ const App: React.FC = () => {
     }));
   };
 
-  const recoverDailyStats = () => {
-      setGuests(prev => prev.map(g => {
-          if (g.status !== 'ALIVE') return g;
-          return {
-              ...g,
-              health: Math.min(100, g.health + 10),
-              sanity: Math.min(100, g.sanity + 10)
-          };
-      }));
-  };
-
   // Called when "Next Day" button is clicked
   const handleTriggerNextDay = () => {
     const aliveGuests = guests.filter(g => g.status === 'ALIVE');
@@ -140,8 +129,7 @@ const App: React.FC = () => {
         return;
     }
     
-    // Recovery Phase (Everyone recovers +10 at start of day)
-    recoverDailyStats();
+    // Recovery Logic Removed
 
     const nextDay = day + 1;
     const isAnomalyPeriod = nextDay >= 5; // Day 5+ is Anomaly period
